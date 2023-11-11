@@ -9,8 +9,11 @@ export const errorHandler = (
   });
 };
 
-export const asyncError = (passedFunc) => (req, res) => {
-  return Promise.resolve(passedFunc(req, res)).catch((err) => {
-    return errorHandler(res, 500, err.message);
-  });
+export const asyncError = (passedFunc) => async (req, res) => {
+  try {
+    await passedFunc(req, res);
+  } catch (err) {
+    await errorHandler(res, 500, err.message);
+  }
 };
+
